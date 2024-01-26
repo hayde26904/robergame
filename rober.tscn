@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://cjqunyfb4tjxc"]
+
+[ext_resource type="Script" path="res://rober.gd" id="1_5qt44"]
+[ext_resource type="Texture2D" uid="uid://dusqec415k6fp" path="res://rober.png" id="1_fa3m6"]
+[ext_resource type="PackedScene" uid="uid://bnlf1wkmymaa1" path="res://HealthComponent.tscn" id="3_t4qkq"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jw36x"]
+size = Vector3(1, 2.82541, 1)
+
+[node name="Rober" type="CharacterBody3D"]
+collision_layer = 2
+script = ExtResource("1_5qt44")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+pixel_size = 0.005
+billboard = 1
+texture = ExtResource("1_fa3m6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.127213, 0)
+shape = SubResource("BoxShape3D_jw36x")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.25
+autostart = true
+
+[node name="HealthComponent" parent="." instance=ExtResource("3_t4qkq")]
+unique_name_in_owner = true
+max_health = 100
+health = 100
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

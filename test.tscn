@@ -1,0 +1,147 @@
+[gd_scene load_steps=9 format=3 uid="uid://d0e8iq1x7xroh"]
+
+[ext_resource type="Texture2D" uid="uid://bxau5rmjm2gr7" path="res://1000_F_17627674_1xWawLAr5NQHWgdVJBk88w6NgdfpzYcr.jpg" id="1_1d7th"]
+[ext_resource type="Texture2D" uid="uid://ch22kjwv5ev5y" path="res://templategrid_albedo.png" id="1_yyesj"]
+[ext_resource type="PackedScene" uid="uid://njkst6uy754i" path="res://player.tscn" id="2_gdxo7"]
+[ext_resource type="PackedScene" uid="uid://cjqunyfb4tjxc" path="res://rober.tscn" id="4_75cjg"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_aok5b"]
+panorama = ExtResource("1_1d7th")
+
+[sub_resource type="Sky" id="Sky_1c3mk"]
+sky_material = SubResource("PanoramaSkyMaterial_aok5b")
+
+[sub_resource type="Environment" id="Environment_re0sj"]
+background_mode = 2
+sky = SubResource("Sky_1c3mk")
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3wsq7"]
+shading_mode = 0
+albedo_texture = ExtResource("1_yyesj")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_re0sj")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.04037, 0)
+use_collision = true
+size = Vector3(50, 1, 50)
+material = SubResource("StandardMaterial3D_3wsq7")
+
+[node name="Player" parent="." instance=ExtResource("2_gdxo7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.191, 0, 7.574)
+
+[node name="Rober" parent="." instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 12)
+
+[node name="Rober2" parent="." instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.33997, 0.0301323, 9.04964)
+
+[node name="Rober3" parent="." instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.58, 0.231577, 3.81816)
+
+[node name="Rober4" parent="." instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.9897, 0.231576, -0.277674)
+
+[node name="Rober5" parent="." instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.17429, 0.231576, -1.36161)
+
+[node name="Rober6" parent="." instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.3656, 0.231576, 14.575)
+
+[node name="Rober7" parent="." instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.36835, 0.231576, 18.6896)
+
+[node name="Rober8" parent="." instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.02838, 0.261708, 15.7392)
+
+[node name="Rober9" parent="." instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.78832, 0.463153, 10.5077)
+
+[node name="Rober10" parent="." instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.37868, 0.463152, 6.41188)
+
+[node name="Rober11" parent="." instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.1941, 0.463152, 5.32795)
+
+[node name="Rober12" parent="." instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.00275, 0.463152, 4.83283)
+
+[node name="Rober" parent="Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 12)
+
+[node name="Rober2" parent="Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.33997, 0.0301323, 9.04964)
+
+[node name="Rober3" parent="Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.58, 0.231577, 3.81816)
+
+[node name="Rober4" parent="Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.9897, 0.231576, -0.277674)
+
+[node name="Rober5" parent="Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.17429, 0.231576, -1.36161)
+
+[node name="Rober6" parent="Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.3656, 0.231576, 14.575)
+
+[node name="Rober7" parent="Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.36835, 0.231576, 18.6896)
+
+[node name="Rober8" parent="Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.02838, 0.261708, 15.7392)
+
+[node name="Rober9" parent="Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.53126, 2.53761, -17.9729)
+
+[node name="Rober10" parent="Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.37868, 0.463152, 6.41188)
+
+[node name="Rober11" parent="Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.1941, 0.463152, 5.32795)
+
+[node name="Rober12" parent="Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.00275, 0.463152, 21.2646)
+
+[node name="Rober" parent="Rober12/Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.0371, 7.36352, -31.8618)
+
+[node name="Rober2" parent="Rober12/Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.3771, 7.39365, -34.8122)
+
+[node name="Rober3" parent="Rober12/Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.6171, 7.5951, -40.0437)
+
+[node name="Rober4" parent="Rober12/Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.0268, 7.59509, -44.1395)
+
+[node name="Rober5" parent="Rober12/Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.2114, 7.59509, -45.2234)
+
+[node name="Rober6" parent="Rober12/Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.4027, 7.59509, -29.2868)
+
+[node name="Rober7" parent="Rober12/Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.66875, 7.59509, -25.1723)
+
+[node name="Rober8" parent="Rober12/Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.0087, 7.62523, -28.1226)
+
+[node name="Rober9" parent="Rober12/Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.2488, 7.82667, -33.3541)
+
+[node name="Rober10" parent="Rober12/Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.6584, 7.82667, -37.45)
+
+[node name="Rober11" parent="Rober12/Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.84304, 7.82667, -38.5339)
+
+[node name="Rober12" parent="Rober12/Rober12" instance=ExtResource("4_75cjg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0343, 7.82667, -22.5973)
