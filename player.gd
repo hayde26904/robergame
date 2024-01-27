@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-const SPEED = 10
+const SPEED = 15
 const ACCEL = 0.5
 const DECEL = 0.5
 const JUMP_VELOCITY = 4.5
@@ -56,6 +56,10 @@ func _physics_process(delta):
 	
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	
+	if position.y < -10:
+		position = Vector3.ZERO
+	
 	if direction:
 		velocity.x = lerpf(velocity.x, direction.x * SPEED, ACCEL)
 		velocity.z = lerpf(velocity.z, direction.z * SPEED, ACCEL)
