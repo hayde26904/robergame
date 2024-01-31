@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 
-@export var SPEED = 50
+@export var SPEED = 100
 @export var DAMAGE = 5
 
 @export var rotation_vector = Vector3.ZERO

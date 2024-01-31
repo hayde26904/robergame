@@ -5,8 +5,10 @@
 [ext_resource type="Script" path="res://HealthBar.gd" id="3_vkd8i"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ao4w2"]
+height = 3.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0laom"]
+height = 3.0
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_8u1xh")
@@ -20,7 +22,7 @@ shape = SubResource("CapsuleShape3D_0laom")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 0.99883, -0.0483617, 0, 0.0483617, 0.99883, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 0.99883, -0.0483617, 0, 0.0483617, 0.99883, 0, 1.41712, 0)
 
 [node name="HealthComponent" parent="." instance=ExtResource("2_ahlr8")]
 unique_name_in_owner = true
@@ -31,3 +33,9 @@ offset_top = 585.0
 offset_right = 507.0
 offset_bottom = 612.0
 script = ExtResource("3_vkd8i")
+
+[node name="shootcooldown" type="Timer" parent="."]
+wait_time = 0.05
+autostart = true
+
+[connection signal="timeout" from="shootcooldown" to="." method="_on_shootcooldown_timeout"]

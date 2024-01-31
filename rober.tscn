@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cjqunyfb4tjxc"]
+[gd_scene load_steps=8 format=3 uid="uid://cjqunyfb4tjxc"]
 
 [ext_resource type="Script" path="res://rober.gd" id="1_5qt44"]
 [ext_resource type="Texture2D" uid="uid://dusqec415k6fp" path="res://rober.png" id="1_fa3m6"]
@@ -7,11 +7,56 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_jw36x"]
 size = Vector3(1, 2.82541, 1)
 
+[sub_resource type="Animation" id="Animation_bnpal"]
+resource_name = "rise_up"
+length = 1.2
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/path = NodePath("Sprite3D")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array()
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, -3, 0), Vector3(0, -2.5, 0), Vector3(0, -2, 0), Vector3(0, -1.5, 0), Vector3(0, -1, 0), Vector3(0, -0.5, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_1mmnk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -3, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lkaqh"]
+_data = {
+"RESET": SubResource("Animation_1mmnk"),
+"rise_up": SubResource("Animation_bnpal")
+}
+
 [node name="Rober" type="CharacterBody3D"]
 collision_layer = 2
 script = ExtResource("1_5qt44")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
 pixel_size = 0.005
 billboard = 1
 alpha_cut = 1
@@ -31,7 +76,14 @@ autostart = true
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_t4qkq")]
 unique_name_in_owner = true
-max_health = 200
-health = 200
+max_health = 25
+health = 25
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_lkaqh")
+}
+autoplay = "rise_up"
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

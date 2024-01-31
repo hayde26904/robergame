@@ -22,6 +22,8 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 var projectile_path = preload("res://projectile.tscn")
 
+var can_shoot = true
+
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		self.rotate_y(-event.relative.x * MOUSE_SENS)
@@ -51,14 +53,15 @@ func _physics_process(delta):
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	
-	if Input.is_action_pressed("shoot"):
+	if Input.is_action_pressed("shoot") and can_shoot:
 		shoot()
+		can_shoot = false
 	
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
 	if position.y < -10:
-		position = Vector3.ZERO
+		position = Vector3(0,3,0)
 	
 	if direction:
 		velocity.x = lerpf(velocity.x, direction.x * SPEED, ACCEL)
@@ -80,3 +83,7 @@ func shoot():
 	new_projectile.position = position
 	new_projectile.rotation = rotation
 	new_projectile.rotation_vector = -Vector3(sin(rotation.y),0, cos(rotation.y))
+
+
+func _on_shootcooldown_timeout():
+	can_shoot = true
