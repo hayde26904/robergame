@@ -6,8 +6,7 @@ const DECEL = 0.5
 const JUMP_VELOCITY = 4.5
 const MOUSE_SENS = 0.01
 
-var max_health = 25
-var health = max_health
+@onready var health_component = %HealthComponent
 
 var movement_ticker = 0
 
@@ -75,7 +74,6 @@ func _physics_process(delta):
 			
 
 	move_and_slide()
-
 
 func shoot():
 	var new_projectile = projectile_path.instantiate()

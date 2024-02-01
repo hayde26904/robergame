@@ -15,7 +15,15 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @export var explosion_sprite = preload("res://explosionsprite.tscn")
 
 var can_go = false
+var can_damage = false
 
+var climbing_scale = 0.0125
+var walking_scale = 0.008
+
+@export var damage = 5
+
+func _ready():
+	$AnimatedSprite3D.pixel_size = climbing_scale
 
 func _physics_process(delta):
 	if can_go:
@@ -38,10 +46,16 @@ func die():
 	new_explosion.pixel_size = 0.08
 	queue_free()
 
-func _on_timer_timeout():
-	#$Sprite3D.flip_h = not $Sprite3D.flip_h
-	pass
-
-
 func _on_animation_player_animation_finished(anim_name):
 	can_go = true
+	$AnimatedSprite3D.pixel_size = walking_scale
+	$AnimatedSprite3D.play("walk")
+
+
+func _on_damage_timer_timeout():
+	can_damage = true
+
+
+func _on_area_3d_body_entered(body):
+	if body.is_in_group("player"):
+		player.health_component.take_damage(damage)
