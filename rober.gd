@@ -20,10 +20,13 @@ var can_damage = false
 var climbing_scale = 0.0125
 var walking_scale = 0.008
 
-@export var damage = 5
+@export var damage = 2
+
+var player_when_touching = null
 
 func _ready():
-	$AnimatedSprite3D.pixel_size = climbing_scale
+	#$AnimatedSprite3D.pixel_size = climbing_scale
+	pass
 
 func _physics_process(delta):
 	if can_go:
@@ -36,7 +39,11 @@ func _physics_process(delta):
 	
 		if health_component.health <= 0:
 			die()
-	
+			
+		if player_when_touching != null and can_damage:
+			player_when_touching.health_component.take_damage(damage)
+			can_damage = false
+		
 		move_and_slide()
 
 func die():
@@ -48,8 +55,8 @@ func die():
 
 func _on_animation_player_animation_finished(anim_name):
 	can_go = true
-	$AnimatedSprite3D.pixel_size = walking_scale
-	$AnimatedSprite3D.play("walk")
+	#$AnimatedSprite3D.pixel_size = walking_scale
+	#$AnimatedSprite3D.play("walk")
 
 
 func _on_damage_timer_timeout():
@@ -58,4 +65,9 @@ func _on_damage_timer_timeout():
 
 func _on_area_3d_body_entered(body):
 	if body.is_in_group("player"):
-		player.health_component.take_damage(damage)
+		player_when_touching = body
+		
+
+func _on_area_3d_body_exited(body):
+	if body.is_in_group("player"):
+		player_when_touching = null

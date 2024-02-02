@@ -24,7 +24,7 @@ func _on_area_3d_body_entered(body):
 		
 func spawn_explosion(body):
 	var new_explosion = explosion_sprite.instantiate()
-	var position_randomizer = randf_range(-0.25, 0.25)
+	var position_randomizer = randf_range(-0.05, 0.25)
 	new_explosion.position = Vector3(position_randomizer, position_randomizer * 5, position_randomizer)
 	body.add_child(new_explosion)
 

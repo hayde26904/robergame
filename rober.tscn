@@ -111,6 +111,7 @@ script = ExtResource("1_5qt44")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
+pixel_size = 0.008
 billboard = 1
 alpha_cut = 1
 alpha_scissor_threshold = 0.833
@@ -119,8 +120,7 @@ alpha_antialiasing_edge = 1.0
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_kwfqh")
 animation = &"walk"
-autoplay = "climb"
-frame_progress = 0.975795
+autoplay = "walk"
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_t4qkq")]
 unique_name_in_owner = true
@@ -139,7 +139,7 @@ autostart = true
 [node name="Area3D" type="Area3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.127213, 0)
+transform = Transform3D(1.43258, 0, 0, 0, 1, 0, 0, 0, 1.30816, 0, 0.127213, 0)
 shape = SubResource("BoxShape3D_jw36x")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -149,3 +149,4 @@ shape = SubResource("BoxShape3D_jw36x")
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="timeout" from="damage_timer" to="." method="_on_damage_timer_timeout"]
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
