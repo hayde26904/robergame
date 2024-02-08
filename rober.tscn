@@ -119,13 +119,8 @@ alpha_antialiasing_mode = 1
 alpha_antialiasing_edge = 1.0
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_kwfqh")
-animation = &"walk"
+animation = &"climb"
 autoplay = "walk"
-
-[node name="HealthComponent" parent="." instance=ExtResource("3_t4qkq")]
-unique_name_in_owner = true
-max_health = 25
-health = 25
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -145,6 +140,9 @@ shape = SubResource("BoxShape3D_jw36x")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.127213, 0)
 shape = SubResource("BoxShape3D_jw36x")
+
+[node name="HealthComponent" parent="." instance=ExtResource("3_t4qkq")]
+unique_name_in_owner = true
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="timeout" from="damage_timer" to="." method="_on_damage_timer_timeout"]

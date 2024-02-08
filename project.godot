@@ -17,7 +17,6 @@ config/icon="res://icon.svg"
 
 [display]
 
-window/size/mode=3
 window/stretch/mode="viewport"
 
 [input]
@@ -53,6 +52,10 @@ shoot={
 3d_physics/layer_1="player"
 3d_physics/layer_2="enemy"
 3d_physics/layer_3="projectile"
+
+[physics]
+
+3d/default_gravity=15.0
 
 [rendering]
 

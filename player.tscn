@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://njkst6uy754i"]
+[gd_scene load_steps=7 format=3 uid="uid://njkst6uy754i"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_8u1xh"]
 [ext_resource type="PackedScene" uid="uid://bnlf1wkmymaa1" path="res://HealthComponent.tscn" id="2_ahlr8"]
 [ext_resource type="Script" path="res://HealthBar.gd" id="3_vkd8i"]
+[ext_resource type="Texture2D" uid="uid://d1sdyyg1bv1fr" path="res://crosshair (2).png" id="4_tc6o8"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ao4w2"]
 height = 3.0
@@ -20,14 +21,29 @@ mesh = SubResource("CapsuleMesh_ao4w2")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." groups=["player"]]
 shape = SubResource("CapsuleShape3D_0laom")
 
-[node name="Camera3D" type="Camera3D" parent="." groups=["player"]]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 0.99883, -0.0483617, 0, 0.0483617, 0.99883, 0, 1.41712, 0)
-
 [node name="HealthComponent" parent="." groups=["player"] instance=ExtResource("2_ahlr8")]
 unique_name_in_owner = true
 max_health = 100
 health = 100
+
+[node name="shootcooldown" type="Timer" parent="." groups=["player"]]
+wait_time = 0.05
+autostart = true
+
+[node name="SpringArm3D" type="SpringArm3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1859, -0.0497962)
+
+[node name="Camera3D" type="Camera3D" parent="SpringArm3D" groups=["player"]]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.99883, -0.0483617, 0, 0.0483617, 0.99883, 0, 0, 0)
+
+[node name="RayCast3D" type="RayCast3D" parent="SpringArm3D/Camera3D"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.99883, 0.0483617, 0, -0.0483617, 0.99883, 0, -0.0302294, -1.14939)
+target_position = Vector3(0, 0, -25)
+debug_shape_custom_color = Color(0, 0.513726, 0.913725, 1)
+debug_shape_thickness = 5
 
 [node name="HealthBar" type="ProgressBar" parent="." groups=["player"]]
 offset_left = 26.0
@@ -36,8 +52,21 @@ offset_right = 507.0
 offset_bottom = 612.0
 script = ExtResource("3_vkd8i")
 
-[node name="shootcooldown" type="Timer" parent="." groups=["player"]]
-wait_time = 0.05
-autostart = true
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -575.0
+offset_top = -324.0
+offset_right = 576.0
+offset_bottom = 324.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer"]
+layout_mode = 2
+texture = ExtResource("4_tc6o8")
 
 [connection signal="timeout" from="shootcooldown" to="." method="_on_shootcooldown_timeout"]
