@@ -36,11 +36,14 @@ shadow_enabled = true
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 use_collision = true
+collision_layer = 8
+collision_mask = 15
 size = Vector3(200, 1, 200)
 material = SubResource("StandardMaterial3D_ua2t0")
 
 [node name="Player" parent="." instance=ExtResource("3_jmqyr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.07756, 15.2879, -18.6525)
+collision_mask = 9
 
 [node name="Timer" type="Timer" parent="."]
 autostart = true

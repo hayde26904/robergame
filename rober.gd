@@ -25,7 +25,6 @@ var walking_scale = 0.008
 var player_when_touching = null
 
 func _ready():
-	#$AnimatedSprite3D.pixel_size = climbing_scale
 	pass
 
 func _physics_process(delta):
@@ -46,12 +45,20 @@ func _physics_process(delta):
 		
 		move_and_slide()
 
+func take_damage(dmg):
+	var position_randomizer = Vector3(randf_range(-0.5, 0.5), randf_range(-1, 2), randf_range(-0.5,0.5))
+	health_component.take_damage(dmg)
+
 func die():
-	var new_explosion = explosion_sprite.instantiate()
-	new_explosion.position = Vector3(position.x, 3, position.z)
-	root_node.add_child(new_explosion)
-	new_explosion.pixel_size = 0.08
+	make_explosion(Vector3(position.x, 3, position.z), 0.08)
 	queue_free()
+
+func make_explosion(pos, p_size):
+	var new_explosion = explosion_sprite.instantiate()
+	new_explosion.position = pos
+	if p_size != -1:
+		new_explosion.pixel_size = p_size
+	root_node.add_child(new_explosion)
 
 func _on_animation_player_animation_finished(anim_name):
 	can_go = true

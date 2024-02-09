@@ -5,7 +5,7 @@ const ACCEL = 0.5
 const DECEL = 0.5
 const JUMP_VELOCITY = 7
 
-const VIEW_TILT = 0.09
+const VIEW_TILT = 0.05
 const IDLE_FOV = 75
 const MOVING_FOV = 95
 
@@ -20,6 +20,8 @@ var base_position = Vector3(0,1,0)
 
 @onready var root_node = get_tree().get_root().get_child(0)
 
+@export var grenade_throw_strength = 15
+
 @onready var Camera = %Camera3D;
 @onready var spring_arm = %SpringArm3D
 @onready var ray_cast = %RayCast3D
@@ -27,6 +29,8 @@ var base_position = Vector3(0,1,0)
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 var projectile_path = preload("res://projectile.tscn")
+@export var explosion_sprite = preload("res://explosionsprite.tscn")
+@export var grenade_scene = preload("res://grenade.tscn")
 
 var can_shoot = true
 
@@ -34,7 +38,7 @@ func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		self.rotate_y(-event.relative.x * MOUSE_SENS)
 		spring_arm.rotate_x(-event.relative.y * MOUSE_SENS)
-		spring_arm.rotation.x = clamp(spring_arm.rotation.x, -0.5, 1.2)
+		spring_arm.rotation.x = clamp(spring_arm.rotation.x, -1.5, 1.5)
 	if event is InputEventKey:
 		if event.pressed and event.keycode == KEY_ESCAPE:
 			get_tree().quit()
@@ -44,13 +48,7 @@ func _ready():
 
 func _process(delta):
 	#print(Camera.position.y)
-	#var ray_collider = ray_cast.get_collider()
-	#if ray_collider != null:
-		#if ray_collider.is_in_group("rober"):
-			#print("ROBER!!")
-			
-	print(ray_cast.get_collider())
-
+	pass
 func _physics_process(delta):
 	# Add the gravity.
 	if not is_on_floor():
@@ -60,14 +58,17 @@ func _physics_process(delta):
 		Camera.position.y += bob_velocity
 
 	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+	
+	if Input.is_action_just_pressed("grenade"):
+		throw_grenade(grenade_throw_strength)
 	
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	
 	if Input.is_action_pressed("shoot") and can_shoot:
-		shoot()
+		shoot_ray()
 		can_shoot = false
 	
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
@@ -85,22 +86,42 @@ func _physics_process(delta):
 		velocity.z = lerpf(velocity.z, 0, DECEL)
 		movement_ticker = 0
 		Camera.position.y = lerpf(Camera.position.y, base_position.y, 0.1)
-	
 	#moving zoom
-	if input_dir.y == -1:
+	if sign(input_dir.y) == -1:
 		Camera.fov = lerpf(Camera.fov, MOVING_FOV, 0.25)
-	elif input_dir.y == 0 or input_dir.y == 1:
+	else:
 		Camera.fov = lerpf(Camera.fov, IDLE_FOV, 0.25)
 	
 	# view tilting
-	if input_dir.x != 0:
-		Camera.rotation.z = lerpf(Camera.rotation.z, -(input_dir.x * VIEW_TILT), 0.25)
-	elif input_dir.x == 0:
-		Camera.rotation.z = lerpf(Camera.rotation.z, 0, 0.25)
-
+	
+	Camera.rotation.z = lerpf(Camera.rotation.z, -(sign(input_dir.x) * VIEW_TILT), 0.25)
 	move_and_slide()
+	
+func shoot_ray():
+	if ray_cast.is_colliding():
+		var collider = ray_cast.get_collider()
+		var pos = ray_cast.get_collision_point()
+		var randomizer_vector = Vector3(randf_range(-0.5,0.5),randf_range(-1,1),randf_range(-0.5,0.5))
+		print(pos)
+		if collider != null and collider.has_method("take_damage"):
+			collider.take_damage(15) #add actual data for damage
+			make_explosion(root_node, collider.explosion_sprite, pos + randomizer_vector, 0.02)
 
-func shoot():
+func make_explosion(parent,sprite, pos, p_size):
+	var new_explosion = sprite.instantiate()
+	new_explosion.position = pos
+	if p_size != -1:
+		new_explosion.pixel_size = p_size
+	parent.add_child(new_explosion)
+	
+func throw_grenade(strength):
+	var new_grenade = grenade_scene.instantiate()
+	new_grenade.position = position
+	new_grenade.rotation_vector = -Vector3(sin(rotation.y),-0.5, cos(rotation.y))
+	new_grenade.throw_strength = strength
+	root_node.add_child(new_grenade)
+
+func shoot_projectile():
 	var new_projectile = projectile_path.instantiate()
 	root_node.add_child(new_projectile)
 	new_projectile.position = position
