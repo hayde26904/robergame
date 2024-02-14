@@ -7,7 +7,7 @@ const JUMP_VELOCITY = 7
 
 const VIEW_TILT = 0.05
 const IDLE_FOV = 75
-const MOVING_FOV = 95
+const MOVING_FOV = 85
 
 const MOUSE_SENS = 0.008
 
@@ -25,6 +25,7 @@ var base_position = Vector3(0,1,0)
 @onready var Camera = %Camera3D;
 @onready var spring_arm = %SpringArm3D
 @onready var ray_cast = %RayCast3D
+@onready var gun_sprite = %GunSprite
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -67,9 +68,13 @@ func _physics_process(delta):
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	
-	if Input.is_action_pressed("shoot") and can_shoot:
-		shoot_ray()
-		can_shoot = false
+	if Input.is_action_pressed("shoot"):
+		if can_shoot:
+			shoot_ray()
+			can_shoot = false
+		gun_sprite.play("shoot")
+	else:
+		gun_sprite.play("no_shoot")
 	
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
@@ -101,11 +106,10 @@ func shoot_ray():
 	if ray_cast.is_colliding():
 		var collider = ray_cast.get_collider()
 		var pos = ray_cast.get_collision_point()
-		var randomizer_vector = Vector3(randf_range(-0.5,0.5),randf_range(-1,1),randf_range(-0.5,0.5))
-		print(pos)
+		var randomizer_vector = Vector3(randf_range(-0.4,0.4),1,randf_range(-0.4,0.4))
 		if collider != null and collider.has_method("take_damage"):
 			collider.take_damage(15) #add actual data for damage
-			make_explosion(root_node, collider.explosion_sprite, pos + randomizer_vector, 0.02)
+			make_explosion(root_node, collider.explosion_sprite, pos + randomizer_vector, 0.01)
 
 func make_explosion(parent,sprite, pos, p_size):
 	var new_explosion = sprite.instantiate()
@@ -117,7 +121,7 @@ func make_explosion(parent,sprite, pos, p_size):
 func throw_grenade(strength):
 	var new_grenade = grenade_scene.instantiate()
 	new_grenade.position = position
-	new_grenade.rotation_vector = -Vector3(sin(rotation.y),-0.5, cos(rotation.y))
+	new_grenade.rotation_vector = -Vector3(sin(rotation.y),-0.5, cos(rotation.y)) + (velocity /  SPEED)
 	new_grenade.throw_strength = strength
 	root_node.add_child(new_grenade)
 

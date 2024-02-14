@@ -14,4 +14,5 @@ func _process(delta):
 
 func _on_area_3d_body_entered(body):
 	if body != null and body.has_method("take_damage"):
+		linear_velocity = -linear_velocity * 2
 		body.take_damage(100)
