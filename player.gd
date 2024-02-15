@@ -26,6 +26,7 @@ var base_position = Vector3(0,1,0)
 @onready var spring_arm = %SpringArm3D
 @onready var ray_cast = %RayCast3D
 @onready var gun_sprite = %GunSprite
+@export var debug_decal: Decal
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -56,7 +57,8 @@ func _physics_process(delta):
 		velocity.y -= gravity * delta
 	else:
 		bob_velocity = sin(movement_ticker * 25)/50
-		Camera.position.y += bob_velocity
+		#bob_velocity = sin(movement_ticker) * 100
+		spring_arm.position.y += bob_velocity
 
 	# Handle jump.
 	if Input.is_action_just_pressed("jump") and is_on_floor():
@@ -90,7 +92,8 @@ func _physics_process(delta):
 		velocity.x = lerpf(velocity.x, 0, DECEL)
 		velocity.z = lerpf(velocity.z, 0, DECEL)
 		movement_ticker = 0
-		Camera.position.y = lerpf(Camera.position.y, base_position.y, 0.1)
+		#Camera.position.y = lerpf(Camera.position.y, base_position.y, 0.1)
+		spring_arm.position.y = lerpf(spring_arm.position.y, base_position.y, 0.1)
 	#moving zoom
 	if sign(input_dir.y) == -1:
 		Camera.fov = lerpf(Camera.fov, MOVING_FOV, 0.25)
@@ -106,10 +109,16 @@ func shoot_ray():
 	if ray_cast.is_colliding():
 		var collider = ray_cast.get_collider()
 		var pos = ray_cast.get_collision_point()
+		var norm = ray_cast.get_collision_normal()
 		var randomizer_vector = Vector3(randf_range(-0.4,0.4),1,randf_range(-0.4,0.4))
-		if collider != null and collider.has_method("take_damage"):
-			collider.take_damage(15) #add actual data for damage
-			make_explosion(root_node, collider.explosion_sprite, pos + randomizer_vector, 0.01)
+		if collider != null:
+			if collider.has_method("take_damage"):
+				collider.take_damage(15) #add actual data for damage
+				make_explosion(root_node, collider.explosion_sprite, pos, 0.01)
+				
+			debug_decal.position = pos
+			#debug_decal.look_at(pos + norm, Vector3.UP)
+			debug_decal.rotation.x = collider.rotation.x + 90
 
 func make_explosion(parent,sprite, pos, p_size):
 	var new_explosion = sprite.instantiate()

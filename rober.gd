@@ -34,7 +34,8 @@ func _physics_process(delta):
 			velocity.y -= gravity * delta
 
 		direction = Vector3(player.position.x - position.x, velocity.y, player.position.z - position.z)
-		velocity = direction.normalized() * SPEED
+		velocity.x = direction.normalized().x * SPEED
+		velocity.z = direction.normalized().z * SPEED
 	
 		if health_component.health <= 0:
 			die()

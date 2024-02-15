@@ -114,7 +114,6 @@ script = ExtResource("1_5qt44")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
 pixel_size = 0.008
 billboard = 1
-alpha_cut = 1
 alpha_scissor_threshold = 0.833
 alpha_antialiasing_mode = 1
 alpha_antialiasing_edge = 1.0
