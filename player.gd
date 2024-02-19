@@ -67,9 +67,6 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("grenade"):
 		throw_grenade(grenade_throw_strength)
 	
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	
 	if Input.is_action_pressed("shoot"):
 		if can_shoot:
 			shoot_ray()
@@ -87,13 +84,13 @@ func _physics_process(delta):
 	if direction:
 		velocity.x = lerpf(velocity.x, direction.x * SPEED, ACCEL)
 		velocity.z = lerpf(velocity.z, direction.z * SPEED, ACCEL)
-		movement_ticker += 1
+		if is_on_floor(): movement_ticker += 1
 	else:
 		velocity.x = lerpf(velocity.x, 0, DECEL)
 		velocity.z = lerpf(velocity.z, 0, DECEL)
 		movement_ticker = 0
-		#Camera.position.y = lerpf(Camera.position.y, base_position.y, 0.1)
 		spring_arm.position.y = lerpf(spring_arm.position.y, base_position.y, 0.1)
+		
 	#moving zoom
 	if sign(input_dir.y) == -1:
 		Camera.fov = lerpf(Camera.fov, MOVING_FOV, 0.25)
@@ -101,7 +98,6 @@ func _physics_process(delta):
 		Camera.fov = lerpf(Camera.fov, IDLE_FOV, 0.25)
 	
 	# view tilting
-	
 	Camera.rotation.z = lerpf(Camera.rotation.z, -(sign(input_dir.x) * VIEW_TILT), 0.25)
 	move_and_slide()
 	

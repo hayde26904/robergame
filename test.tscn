@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://d0e8iq1x7xroh"]
+[gd_scene load_steps=14 format=3 uid="uid://d0e8iq1x7xroh"]
 
 [ext_resource type="Texture2D" uid="uid://bxau5rmjm2gr7" path="res://1000_F_17627674_1xWawLAr5NQHWgdVJBk88w6NgdfpzYcr.jpg" id="1_1d7th"]
 [ext_resource type="Texture2D" path="res://rocky_trail_02_2k.gltf/textures/rocky_trail_02_diff_2k.dds" id="2_4knlf"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" path="res://rocky_trail_02_2k.gltf/textures/rocky_trail_02_nor_gl_2k.dds" id="3_umdcs"]
 [ext_resource type="Script" path="res://roberspawn.gd" id="5_38wmy"]
 [ext_resource type="Texture2D" uid="uid://bp0qkcfyut816" path="res://icon.svg" id="6_w1578"]
+[ext_resource type="PackedScene" uid="uid://cjqunyfb4tjxc" path="res://rober.tscn" id="7_ama8s"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_aok5b"]
 panorama = ExtResource("1_1d7th")
@@ -27,6 +28,8 @@ normal_texture = ExtResource("3_umdcs")
 uv1_scale = Vector3(16, 16, 16)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_14bbf"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dyybr"]
 
 [node name="Node3D" type="Node3D"]
 
@@ -66,5 +69,19 @@ collision_layer = 8
 collision_mask = 7
 size = Vector3(9.37402, 4.73938, 1)
 material = SubResource("StandardMaterial3D_14bbf")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.16223, -9.36445)
+use_collision = true
+collision_layer = 8
+collision_mask = 3
+polygon = PackedVector2Array(0, 0, -0.117977, 2.47695, 7.15069, 2.97204, 3.74465, 0.0452175)
+mode = 1
+spin_degrees = 360.0
+spin_sides = 8
+material = SubResource("StandardMaterial3D_dyybr")
+
+[node name="Rober" parent="." instance=ExtResource("7_ama8s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.128, 0.5, 40.357)
 
 [connection signal="timeout" from="Timer" to="Timer" method="_on_timeout"]

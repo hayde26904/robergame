@@ -2,19 +2,20 @@ extends CharacterBody3D
 
 
 var SPEED = randi_range(5,10)
-const JUMP_VELOCITY = 4.5
+const JUMP_VELOCITY = 8
 
 var direction = Vector3.ZERO;
 
 @onready var root_node = get_tree().get_root().get_child(0)
 @onready var player = root_node.get_node("Player")
 @onready var health_component = %HealthComponent
+@onready var ray_cast = %RayCast3D
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 @export var explosion_sprite = preload("res://explosionsprite.tscn")
 
-var can_go = false
+var out_of_ground = false
 var can_damage = false
 
 var climbing_scale = 0.0125
@@ -28,14 +29,18 @@ func _ready():
 	pass
 
 func _physics_process(delta):
-	if can_go:
+	
+	look_at(player.position, Vector3.UP)
+	rotation.x = 0
+	
+	if out_of_ground:
 		# Add the gravity.
 		if not is_on_floor():
 			velocity.y -= gravity * delta
-
-		direction = Vector3(player.position.x - position.x, velocity.y, player.position.z - position.z)
-		velocity.x = direction.normalized().x * SPEED
-		velocity.z = direction.normalized().z * SPEED
+		
+		direction = -Vector3(sin(rotation.y),0, cos(rotation.y))
+		velocity.x = direction.x * SPEED
+		velocity.z = direction.z * SPEED
 	
 		if health_component.health <= 0:
 			die()
@@ -62,7 +67,7 @@ func make_explosion(pos, p_size):
 	root_node.add_child(new_explosion)
 
 func _on_animation_player_animation_finished(anim_name):
-	can_go = true
+	out_of_ground = true
 	#$AnimatedSprite3D.pixel_size = walking_scale
 	#$AnimatedSprite3D.play("walk")
 
@@ -70,6 +75,9 @@ func _on_animation_player_animation_finished(anim_name):
 func _on_damage_timer_timeout():
 	can_damage = true
 
+func _on_jump_timer_timeout():
+	if ray_cast.is_colliding() and is_on_floor():
+		velocity.y = JUMP_VELOCITY
 
 func _on_area_3d_body_entered(body):
 	if body.is_in_group("player"):
