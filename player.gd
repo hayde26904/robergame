@@ -73,7 +73,7 @@ func _physics_process(delta):
 	if current_weapon != null:
 		if Input.is_action_pressed("shoot"):
 			if can_shoot:
-				shoot_ray()
+				shoot_projectile()
 				can_shoot = false
 			gun_sprite.play("shoot")
 		else:
@@ -147,7 +147,7 @@ func shoot_projectile():
 	root_node.add_child(new_projectile)
 	new_projectile.position = position
 	new_projectile.rotation = rotation
-	new_projectile.rotation_vector = -Vector3(sin(rotation.y),0, cos(rotation.y))
+	new_projectile.direction = -Vector3(sin(spring_arm.rotation.y),0, cos(spring_arm.rotation.y))
 
 
 func _on_shootcooldown_timeout():

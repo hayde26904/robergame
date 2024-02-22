@@ -13,7 +13,7 @@ var direction = Vector3.ZERO;
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
-@export var explosion_sprite = preload("res://explosionsprite.tscn")
+@export var damage_particle : PackedScene = preload("res://explosionsprite.tscn")
 
 var out_of_ground = false
 var can_damage = false
@@ -51,19 +51,15 @@ func _physics_process(delta):
 		
 		move_and_slide()
 
-func take_damage(dmg):
-	var position_randomizer = Vector3(randf_range(-0.5, 0.5), randf_range(-1, 2), randf_range(-0.5,0.5))
-	health_component.take_damage(dmg)
-
 func die():
-	make_explosion(Vector3(position.x, 3, position.z), 0.08)
+	make_damage_particle(Vector3(position.x, 3, position.z), 8)
 	queue_free()
 
-func make_explosion(pos, p_size):
-	var new_explosion = explosion_sprite.instantiate()
+func make_damage_particle(pos : Vector3, p_size : float):
+	var new_explosion = damage_particle.instantiate()
 	new_explosion.position = pos
 	if p_size != -1:
-		new_explosion.pixel_size = p_size
+		new_explosion.pixel_size = p_size / 100
 	root_node.add_child(new_explosion)
 
 func _on_animation_player_animation_finished(anim_name):

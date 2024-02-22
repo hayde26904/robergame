@@ -86,7 +86,7 @@ script = ExtResource("3_vkd8i")
 [node name="GunSprite" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
 texture_filter = 1
-position = Vector2(889, 478)
+position = Vector2(886, 495)
 rotation = 0.202602
 animation = &""
 

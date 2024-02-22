@@ -4,7 +4,7 @@ extends CharacterBody3D
 @export var SPEED = 100
 @export var DAMAGE = 5
 
-@export var rotation_vector = Vector3.ZERO
+@export var direction = Vector3.ZERO
 
 @export var explosion_sprite = preload("res://explosionsprite.tscn")
 
@@ -12,21 +12,16 @@ extends CharacterBody3D
 
 
 func _physics_process(delta):
-	velocity = rotation_vector * SPEED
+	velocity = direction * SPEED
 	move_and_slide()
 
 
 func _on_area_3d_body_entered(body):
 	if body.has_node("HealthComponent"):
 		body.get_node("HealthComponent").take_damage(DAMAGE)
-		spawn_explosion(body)
+		if body.is_in_group("rober"):
+			body.make_damage_particle(position, 1)
 		queue_free()
-		
-func spawn_explosion(body):
-	var new_explosion = explosion_sprite.instantiate()
-	var position_randomizer = randf_range(-0.05, 0.4)
-	new_explosion.position = Vector3(position_randomizer, position_randomizer * 5, position_randomizer)
-	body.add_child(new_explosion)
 
 
 func _on_timer_timeout():

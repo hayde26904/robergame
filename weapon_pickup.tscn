@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://osds6gt883co"]
+[gd_scene load_steps=4 format=3 uid="uid://osds6gt883co"]
 
 [sub_resource type="GDScript" id="GDScript_kri7c"]
 script/source = "extends Area3D
@@ -7,10 +7,12 @@ script/source = "extends Area3D
 @onready var sprite = %Sprite3D
 
 var ticker : int = 0
+var magnet_target = null
+var magnet_speed = 1
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	sprite.texture = weapon_res.pickup_texture
-	sprite.pixel_size = weapon_res.pickup_size
+	sprite.pixel_size = weapon_res.pickup_size / 1000
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -19,16 +21,30 @@ func _process(delta):
 
 func _physics_process(delta):
 	ticker += 1
+	if magnet_target != null:
+		position += (magnet_target.position - position).normalized() * magnet_speed/5
 	rotate_y(0.1)
 	position.y += sin(ticker * 25) / 50
-
 func _on_body_entered(body):
 	if body.has_method(\"pickup_weapon\"):
 		body.pickup_weapon(weapon_res)
 		queue_free()
+
+
+func _on_magnetize_area_body_entered(body):
+	if body.has_method(\"pickup_weapon\"):
+		magnet_target = body
+
+
+func _on_magnetize_area_body_exited(body):
+	if body == magnet_target:
+		magnet_target = null
 "
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8nqbp"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cfqru"]
+size = Vector3(10, 10, 10)
 
 [node name="WeaponPickup" type="Area3D"]
 script = SubResource("GDScript_kri7c")
@@ -39,4 +55,11 @@ unique_name_in_owner = true
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_8nqbp")
 
+[node name="magnetize_area" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="magnetize_area"]
+shape = SubResource("BoxShape3D_cfqru")
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_entered" from="magnetize_area" to="." method="_on_magnetize_area_body_entered"]
+[connection signal="body_exited" from="magnetize_area" to="." method="_on_magnetize_area_body_exited"]

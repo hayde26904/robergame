@@ -39,6 +39,6 @@ animations = [{
 script = ExtResource("1_l0c87")
 sprite_frames = SubResource("SpriteFrames_s1172")
 pickup_texture = ExtResource("1_osujb")
-pickup_size = 0.005
+pickup_size = 3.0
 damage = 15
 fire_rate = 20
