@@ -17,7 +17,6 @@ config/icon="res://icon.svg"
 
 [display]
 
-window/size/mode=3
 window/stretch/mode="viewport"
 
 [input]
@@ -64,6 +63,7 @@ jump={
 3d_physics/layer_2="enemy"
 3d_physics/layer_3="projectile"
 3d_physics/layer_4="wall"
+3d_physics/layer_5="grenade"
 
 [physics]
 

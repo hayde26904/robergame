@@ -18,6 +18,8 @@ var movement_ticker = 0
 var bob_velocity = 0
 var base_position = Vector3(0,1,0)
 
+var direction : Vector3
+
 @onready var root_node = get_tree().get_root().get_child(0)
 
 @export var grenade_throw_strength = 15
@@ -35,6 +37,8 @@ var projectile_path = preload("res://projectile.tscn")
 @export var grenade_scene = preload("res://grenade.tscn")
 
 var can_shoot = true
+
+var current_weapon : Resource =  null
 
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
@@ -66,21 +70,20 @@ func _physics_process(delta):
 	
 	if Input.is_action_just_pressed("grenade"):
 		throw_grenade(grenade_throw_strength)
-	
-	if Input.is_action_pressed("shoot"):
-		if can_shoot:
-			shoot_ray()
-			can_shoot = false
-		gun_sprite.play("shoot")
-	else:
-		gun_sprite.play("no_shoot")
+	if current_weapon != null:
+		if Input.is_action_pressed("shoot"):
+			if can_shoot:
+				shoot_ray()
+				can_shoot = false
+			gun_sprite.play("shoot")
+		else:
+			gun_sprite.play("no_shoot")
 	
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
-	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
 	if position.y < -10:
 		position = Vector3(0,3,0)
-	
 	if direction:
 		velocity.x = lerpf(velocity.x, direction.x * SPEED, ACCEL)
 		velocity.z = lerpf(velocity.z, direction.z * SPEED, ACCEL)
@@ -107,14 +110,23 @@ func shoot_ray():
 		var pos = ray_cast.get_collision_point()
 		var norm = ray_cast.get_collision_normal()
 		var randomizer_vector = Vector3(randf_range(-0.4,0.4),1,randf_range(-0.4,0.4))
+		var gun_dmg = current_weapon.damage
 		if collider != null:
 			if collider.has_method("take_damage"):
-				collider.take_damage(15) #add actual data for damage
+				collider.take_damage(gun_dmg)
 				make_explosion(root_node, collider.explosion_sprite, pos, 0.01)
+			if collider is RigidBody3D:
+				collider.apply_force(-Vector3(sin(rotation.y),-0.5, cos(rotation.y)) * gun_dmg * 10, collider.position - pos)
 				
 			debug_decal.position = pos
 			#debug_decal.look_at(pos + norm, Vector3.UP)
 			debug_decal.rotation.x = collider.rotation.x + 90
+
+func pickup_weapon(weapon):
+	current_weapon = weapon
+	gun_sprite.sprite_frames = current_weapon.sprite_frames
+	gun_sprite.speed_scale = current_weapon.fire_rate
+	print(weapon)
 
 func make_explosion(parent,sprite, pos, p_size):
 	var new_explosion = sprite.instantiate()

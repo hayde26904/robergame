@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://d0e8iq1x7xroh"]
+[gd_scene load_steps=18 format=3 uid="uid://d0e8iq1x7xroh"]
 
 [ext_resource type="Texture2D" uid="uid://bxau5rmjm2gr7" path="res://1000_F_17627674_1xWawLAr5NQHWgdVJBk88w6NgdfpzYcr.jpg" id="1_1d7th"]
 [ext_resource type="Texture2D" path="res://rocky_trail_02_2k.gltf/textures/rocky_trail_02_diff_2k.dds" id="2_4knlf"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://roberspawn.gd" id="5_38wmy"]
 [ext_resource type="Texture2D" uid="uid://bp0qkcfyut816" path="res://icon.svg" id="6_w1578"]
 [ext_resource type="PackedScene" uid="uid://cjqunyfb4tjxc" path="res://rober.tscn" id="7_ama8s"]
+[ext_resource type="PackedScene" uid="uid://osds6gt883co" path="res://weapon_pickup.tscn" id="8_gcpdu"]
+[ext_resource type="Resource" uid="uid://d7s0nxjgg5sc" path="res://weapons/test_blaster.tres" id="9_a7d0c"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_aok5b"]
 panorama = ExtResource("1_1d7th")
@@ -31,6 +33,10 @@ uv1_scale = Vector3(16, 16, 16)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dyybr"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_x0jtc"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qaa3b"]
+
 [node name="Node3D" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -43,7 +49,7 @@ shadow_enabled = true
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 use_collision = true
 collision_layer = 8
-collision_mask = 15
+collision_mask = 23
 size = Vector3(200, 1, 200)
 material = SubResource("StandardMaterial3D_ua2t0")
 
@@ -66,7 +72,7 @@ texture_albedo = ExtResource("6_w1578")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.18701, 2.84313, 12.2984)
 use_collision = true
 collision_layer = 8
-collision_mask = 7
+collision_mask = 23
 size = Vector3(9.37402, 4.73938, 1)
 material = SubResource("StandardMaterial3D_14bbf")
 
@@ -83,5 +89,20 @@ material = SubResource("StandardMaterial3D_dyybr")
 
 [node name="Rober" parent="." instance=ExtResource("7_ama8s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.128, 0.5, 40.357)
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.2461, 6.15853, 0)
+collision_layer = 8
+collision_mask = 27
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
+mesh = SubResource("BoxMesh_x0jtc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("BoxShape3D_qaa3b")
+
+[node name="WeaponPickup" parent="." instance=ExtResource("8_gcpdu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.4616, 2.90718, -35.5124)
+weapon_res = ExtResource("9_a7d0c")
 
 [connection signal="timeout" from="Timer" to="Timer" method="_on_timeout"]

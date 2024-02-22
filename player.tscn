@@ -1,50 +1,15 @@
-[gd_scene load_steps=12 format=3 uid="uid://njkst6uy754i"]
+[gd_scene load_steps=7 format=3 uid="uid://njkst6uy754i"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_8u1xh"]
 [ext_resource type="PackedScene" uid="uid://bnlf1wkmymaa1" path="res://HealthComponent.tscn" id="2_ahlr8"]
 [ext_resource type="Script" path="res://HealthBar.gd" id="3_vkd8i"]
 [ext_resource type="Texture2D" uid="uid://d1sdyyg1bv1fr" path="res://crosshair (2).png" id="4_tc6o8"]
-[ext_resource type="Texture2D" uid="uid://d1h0b7gtioxtl" path="res://nerf_anim.png" id="5_q0r81"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ao4w2"]
 height = 3.5
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0laom"]
 height = 3.5
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_a4dx3"]
-atlas = ExtResource("5_q0r81")
-region = Rect2(0, 0, 605, 412)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jpxft"]
-atlas = ExtResource("5_q0r81")
-region = Rect2(0, 0, 605, 412)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_y8213"]
-atlas = ExtResource("5_q0r81")
-region = Rect2(0, 412, 605, 412)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_235jl"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_a4dx3")
-}],
-"loop": true,
-"name": &"no_shoot",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jpxft")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_y8213")
-}],
-"loop": true,
-"name": &"shoot",
-"speed": 20.0
-}]
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 collision_mask = 11
@@ -79,7 +44,7 @@ transform = Transform3D(1, 0, 0, 0, 0.99883, -0.0483617, 0, 0.0483617, 0.99883, 
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.157)
 target_position = Vector3(0, 0, -500)
-collision_mask = 10
+collision_mask = 26
 debug_shape_custom_color = Color(0, 0.513726, 0.913725, 1)
 debug_shape_thickness = 5
 
@@ -123,7 +88,6 @@ unique_name_in_owner = true
 texture_filter = 1
 position = Vector2(889, 478)
 rotation = 0.202602
-sprite_frames = SubResource("SpriteFrames_235jl")
-animation = &"no_shoot"
+animation = &""
 
 [connection signal="timeout" from="shootcooldown" to="." method="_on_shootcooldown_timeout"]

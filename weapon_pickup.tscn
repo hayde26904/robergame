@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=3 uid="uid://osds6gt883co"]
+
+[sub_resource type="GDScript" id="GDScript_kri7c"]
+script/source = "extends Area3D
+
+@export var weapon_res : Resource
+@onready var sprite = %Sprite3D
+
+var ticker : int = 0
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	sprite.texture = weapon_res.pickup_texture
+	sprite.pixel_size = weapon_res.pickup_size
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+
+func _physics_process(delta):
+	ticker += 1
+	rotate_y(0.1)
+	position.y += sin(ticker * 25) / 50
+
+func _on_body_entered(body):
+	if body.has_method(\"pickup_weapon\"):
+		body.pickup_weapon(weapon_res)
+		queue_free()
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8nqbp"]
+
+[node name="WeaponPickup" type="Area3D"]
+script = SubResource("GDScript_kri7c")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+unique_name_in_owner = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_8nqbp")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
