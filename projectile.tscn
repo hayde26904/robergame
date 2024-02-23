@@ -1,29 +1,42 @@
-[gd_scene load_steps=4 format=3 uid="uid://cqd5umibk7evh"]
+[gd_scene load_steps=5 format=3 uid="uid://cqd5umibk7evh"]
 
 [ext_resource type="Script" path="res://projectile.gd" id="1_rbblb"]
-[ext_resource type="Texture2D" uid="uid://bp0qkcfyut816" path="res://icon.svg" id="1_s3png"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_8hsmo"]
-radius = 0.277187
+[sub_resource type="BoxShape3D" id="BoxShape3D_i84md"]
+size = Vector3(0.04, 0.04, 15)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8gkwd"]
+shading_mode = 0
+albedo_color = Color(0.847059, 0.705882, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_s0wxd"]
+material = SubResource("StandardMaterial3D_8gkwd")
+size = Vector3(0.04, 0.04, 15)
 
 [node name="Projectile" type="CharacterBody3D"]
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1_rbblb")
 
-[node name="Sprite3D" type="Sprite3D" parent="."]
-pixel_size = 0.005
-texture = ExtResource("1_s3png")
-
 [node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.2277)
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-shape = SubResource("SphereShape3D_8hsmo")
+shape = SubResource("BoxShape3D_i84md")
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
 autostart = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00489807, 0, 0.00136757)
+mesh = SubResource("BoxMesh_s0wxd")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(1, 1, 0.00784314, 1)
+light_energy = 0.01
+light_indirect_energy = 5.848
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -28,7 +28,10 @@ var direction : Vector3
 @onready var spring_arm = %SpringArm3D
 @onready var ray_cast = %RayCast3D
 @onready var gun_sprite = %GunSprite
+@onready var crosshair = %Crosshair
+@onready var gun_point = %GunPoint
 @export var debug_decal: Decal
+@onready var debug_mesh = %DebugMesh
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -145,9 +148,18 @@ func throw_grenade(strength):
 func shoot_projectile():
 	var new_projectile = projectile_path.instantiate()
 	root_node.add_child(new_projectile)
-	new_projectile.position = position
-	new_projectile.rotation = rotation
-	new_projectile.direction = -Vector3(sin(spring_arm.rotation.y),0, cos(spring_arm.rotation.y))
+	new_projectile.global_position = Camera.project_position(gun_point.position, 2)
+	new_projectile.rotation.y = rotation.y
+	new_projectile.rotation.x = spring_arm.rotation.x
+	#new_projectile.direction = -Vector3(sin(rotation.y),spring_arm.rotation.x, cos(rotation.y))
+	'''new_projectile.direction = -Vector3(
+	sin(rotation.y) * cos(spring_arm.rotation.x),
+	-sin(spring_arm.rotation.x),
+	cos(rotation.y) * cos(spring_arm.rotation.x)
+	)'''
+	var crosshair_projected_pos = Camera.project_position(crosshair.position, 4)
+	debug_mesh.global_position = crosshair_projected_pos
+	new_projectile.direction = (crosshair_projected_pos - new_projectile.global_position).normalized()
 
 
 func _on_shootcooldown_timeout():
