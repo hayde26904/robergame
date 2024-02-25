@@ -1,8 +1,8 @@
 extends CharacterBody3D
 
 
-@export var SPEED = 300
-@export var DAMAGE = 5
+@export var SPEED = 400
+@export var DAMAGE = 20
 
 @export var direction = Vector3.ZERO
 
