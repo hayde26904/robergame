@@ -1,3 +1,5 @@
 [gd_resource type="Terrain3DTextureList" format=3 uid="uid://c47v41sjl7pxs"]
 
 [resource]
+resource_local_to_scene = false
+resource_name = ""

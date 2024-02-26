@@ -1,0 +1,54 @@
+[gd_scene load_steps=3 format=3 uid="uid://cqd5umibk7evh"]
+
+[sub_resource type="GDScript" id="GDScript_ftelu"]
+script/source = "extends CharacterBody3D
+
+
+@export var SPEED : int = 300
+@export var DAMAGE : int = 30
+
+@export var direction = Vector3.ZERO
+
+@onready var root_node = get_tree().get_root().get_child(0)
+
+func _ready():
+	pass
+
+func _physics_process(delta):
+	velocity = direction * SPEED
+	move_and_slide()
+
+
+func _on_area_3d_body_entered(body):
+	if body.has_node(\"HealthComponent\"):
+		body.get_node(\"HealthComponent\").take_damage(DAMAGE)
+		if body.is_in_group(\"rober\"):
+			body.make_damage_particle(position, 1)
+	queue_free()
+
+
+func _on_timer_timeout():
+	queue_free()
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_i84md"]
+size = Vector3(0.04, 0.04, 5)
+
+[node name="CollisionProjectile" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 2
+script = SubResource("GDScript_ftelu")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_i84md")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

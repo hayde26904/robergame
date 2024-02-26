@@ -103,7 +103,7 @@ _data = {
 }
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jw36x"]
-size = Vector3(1.3, 3.5, 1.3)
+size = Vector3(1, 3.5, 1)
 
 [node name="Rober" type="CharacterBody3D" groups=["rober"]]
 collision_layer = 2

@@ -2,7 +2,8 @@ extends Resource
 class_name Weapon
 
 @export_enum("Raycast", "Projectile") var collision_type : String
-@export var projectile_scene: PackedScene
+@export var projectile_visual_scene: PackedScene
+@export var projectile_collision_scene: PackedScene
 @export var sprite_frames : SpriteFrames
 @export var pickup_texture : Texture2D
 @export var pickup_size : float
@@ -14,28 +15,29 @@ func fire(root_node : Node3D, viewport : Viewport):
 	var Camera = viewport.get_camera_3d()
 	var viewport_center = viewport.get_visible_rect().size / 2
 	
-	print("goose")
-	
 	if collision_type == "Raycast":
 		var ray = cast_ray(viewport_center, 1000, root_node, Camera)
 		if ray != {}: print(ray)
 	elif collision_type == "Projectile":
-		var new_projectile = projectile_scene.instantiate()
-		var fire_point_projected_pos = Camera.project_position(fire_point, 1)
-		var target_point = Camera.project_position(viewport_center, 300)
 		
-		root_node.add_child(new_projectile)
-		new_projectile.position = fire_point_projected_pos
-		new_projectile.look_at(target_point, Vector3(0,1,0))
+		var visual_projectile = projectile_visual_scene.instantiate()
+		var collision_projectile = projectile_collision_scene.instantiate()
 		
-		new_projectile.direction = (target_point - new_projectile.position).normalized()
-		#new_projectile.rotation.y = rotation.y
-		#new_projectile.rotation.x = spring_arm.rotation.x
-		"""new_projectile.direction = -Vector3(
-		sin(rotation.y) * cos(new_projectile.rotation.x),
-		-sin(new_projectile.rotation.x),
-		cos(rotation.y) * cos(new_projectile.rotation.x)
-		)"""
+		var fire_point_3D = Camera.project_position(fire_point, 1)
+		var viewport_center_3D = Camera.project_position(viewport_center, 0)
+		var target_point = Camera.project_position(viewport_center, 100)
+		
+		root_node.add_child(visual_projectile)
+		root_node.add_child(collision_projectile)
+		
+		visual_projectile.position = fire_point_3D
+		collision_projectile.position = viewport_center_3D
+		
+		visual_projectile.look_at(target_point, Vector3.UP)
+		collision_projectile.look_at(target_point, Vector3.UP)
+		
+		visual_projectile.direction = (target_point - visual_projectile.position).normalized()
+		collision_projectile.direction = (target_point - collision_projectile.position).normalized()
 		
 func cast_ray(origin : Vector2, length : int, root_node : Node3D, camera : Camera3D):
 	var ray_length = length

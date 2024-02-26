@@ -1,0 +1,50 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=10 format=3 uid="uid://d7s0nxjgg5sc"]
+
+[ext_resource type="Texture2D" uid="uid://cotx3s15bklro" path="res://blasterpickup.png" id="1_oiv5u"]
+[ext_resource type="PackedScene" uid="uid://cqd5umibk7evh" path="res://weapons/test_blaster/projectiles/collision.tscn" id="2_ofsfx"]
+[ext_resource type="Script" path="res://weapons/weapon.gd" id="3_63ukr"]
+[ext_resource type="PackedScene" uid="uid://hvamf6v8ej6r" path="res://weapons/test_blaster/projectiles/visual.tscn" id="3_ggt2y"]
+[ext_resource type="Texture2D" uid="uid://cd4jfjipgikrq" path="res://nerf.png" id="4_v6dud"]
+[ext_resource type="Texture2D" uid="uid://d1h0b7gtioxtl" path="res://nerf_anim.png" id="5_r3w4l"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_teuwu"]
+atlas = ExtResource("5_r3w4l")
+region = Rect2(0, 0, 605, 412)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qs6v0"]
+atlas = ExtResource("5_r3w4l")
+region = Rect2(0, 412, 605, 412)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_s1172"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_v6dud")
+}],
+"loop": true,
+"name": &"no_shoot",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_teuwu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qs6v0")
+}],
+"loop": true,
+"name": &"shoot",
+"speed": 1.0
+}]
+
+[resource]
+script = ExtResource("3_63ukr")
+collision_type = "Projectile"
+projectile_visual_scene = ExtResource("3_ggt2y")
+projectile_collision_scene = ExtResource("2_ofsfx")
+sprite_frames = SubResource("SpriteFrames_s1172")
+pickup_texture = ExtResource("1_oiv5u")
+pickup_size = 3.0
+damage = 15
+fire_rate = 20
+fire_point = Vector2(876, 409)
