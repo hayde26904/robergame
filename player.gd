@@ -1,9 +1,9 @@
 extends CharacterBody3D
 
 const SPEED = 20
-const ACCEL = 0.5
-const DECEL = 0.5
-const JUMP_VELOCITY = 7
+const ACCEL = 0.1
+const DECEL = 0.1
+const JUMP_VELOCITY = 20
 
 const VIEW_TILT = 0.05
 const IDLE_FOV = 75
@@ -21,6 +21,7 @@ var base_position = Vector3(0,1,0)
 var direction : Vector3
 
 @onready var root_node = get_tree().get_root().get_child(0)
+@onready var viewport = get_viewport()
 
 @export var grenade_throw_strength = 15
 
@@ -58,7 +59,7 @@ func weapon_inputs():
 	if current_weapon != null:
 		if Input.is_action_pressed("shoot"):
 			if can_shoot:
-				should_shoot = true
+				current_weapon.fire(root_node, viewport, Camera)
 				can_shoot = false
 			gun_sprite.play("shoot")
 		else:
@@ -75,9 +76,6 @@ func _process(delta):
 	weapon_inputs()
 	
 	# I know this code is stupid but it's a necessary evil because godot is being silly and I'm tired
-	if should_shoot and current_weapon.collision_type == "Projectile": 
-		current_weapon.fire(root_node, get_viewport())
-		should_shoot = false
 			
 func _physics_process(delta):
 	# Add the gravity.
@@ -86,11 +84,6 @@ func _physics_process(delta):
 	else:
 		bob_velocity = sin(movement_ticker * 25)/50
 		spring_arm.position.y += bob_velocity
-		
-	# I know this code is stupid but it's a necessary evil because godot is being silly and I'm tired
-	if should_shoot and current_weapon.collision_type == "Raycast":
-		current_weapon.fire(root_node, get_viewport())
-		should_shoot = false
 		
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
@@ -117,37 +110,12 @@ func _physics_process(delta):
 	# view tilting
 	Camera.rotation.z = lerpf(Camera.rotation.z, -(sign(input_dir.x) * VIEW_TILT), 0.25)
 	move_and_slide()
-	
-func shoot_ray():
-	if ray_cast.is_colliding():
-		var collider = ray_cast.get_collider()
-		var pos = ray_cast.get_collision_point()
-		var norm = ray_cast.get_collision_normal()
-		var randomizer_vector = Vector3(randf_range(-0.4,0.4),1,randf_range(-0.4,0.4))
-		var gun_dmg = current_weapon.damage
-		if collider != null:
-			if collider.has_method("take_damage"):
-				collider.take_damage(gun_dmg)
-				make_explosion(root_node, collider.explosion_sprite, pos, 0.01)
-			if collider is RigidBody3D:
-				collider.apply_force(-Vector3(sin(rotation.y),-0.5, cos(rotation.y)) * gun_dmg * 10, collider.position - pos)
-				
-			debug_decal.position = pos
-			#debug_decal.look_at(pos + norm, Vector3.UP)
-			debug_decal.rotation.x = collider.rotation.x + 90
 
 func pickup_weapon(weapon : Weapon):
 	current_weapon = weapon
 	gun_sprite.sprite_frames = current_weapon.sprite_frames
 	gun_sprite.speed_scale = current_weapon.fire_rate
 	print(weapon)
-
-func make_explosion(parent,sprite, pos, p_size):
-	var new_explosion = sprite.instantiate()
-	new_explosion.position = pos
-	if p_size != -1:
-		new_explosion.pixel_size = p_size
-	parent.add_child(new_explosion)
 	
 func throw_grenade(strength):
 	var new_grenade = grenade_scene.instantiate()
@@ -155,7 +123,6 @@ func throw_grenade(strength):
 	new_grenade.rotation_vector = -Vector3(sin(rotation.y),-0.5, cos(rotation.y)) + (velocity /  SPEED)
 	new_grenade.throw_strength = strength
 	root_node.add_child(new_grenade)
-
 
 func _on_shootcooldown_timeout():
 	can_shoot = true

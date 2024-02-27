@@ -4,11 +4,15 @@
 script/source = "extends Area3D
 
 @export var weapon_res : Resource
+@export var rotation_speed : float = 6
+@export var magnet_speed : float = 1
+@export var sine_height : float = 10
+@export var sine_speed : float = 1
+
 @onready var sprite = %Sprite3D
 
 var ticker : int = 0
 var magnet_target = null
-var magnet_speed = 1
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	sprite.texture = weapon_res.pickup_texture
@@ -22,9 +26,9 @@ func _process(delta):
 func _physics_process(delta):
 	ticker += 1
 	if magnet_target != null:
-		position += (magnet_target.position - position).normalized() * magnet_speed/5
-	rotate_y(0.1)
-	position.y += sin(ticker * 25) / 50
+		position += (magnet_target.position - position).normalized() * magnet_speed/10
+	rotate_y(rotation_speed/100)
+	position.y += sin(ticker / 10 - sine_speed) * sine_height/1000
 func _on_body_entered(body):
 	if body.has_method(\"pickup_weapon\"):
 		body.pickup_weapon(weapon_res)

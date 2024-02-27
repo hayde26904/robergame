@@ -68,7 +68,7 @@ jump={
 [physics]
 
 3d/run_on_separate_thread=true
-common/physics_ticks_per_second=100
+common/physics_ticks_per_second=120
 3d/default_gravity=15.0
 
 [rendering]

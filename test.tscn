@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bp0qkcfyut816" path="res://icon.svg" id="6_w1578"]
 [ext_resource type="PackedScene" uid="uid://cjqunyfb4tjxc" path="res://rober.tscn" id="7_ama8s"]
 [ext_resource type="PackedScene" uid="uid://osds6gt883co" path="res://weapon_pickup.tscn" id="8_gcpdu"]
-[ext_resource type="Resource" uid="uid://d7s0nxjgg5sc" path="res://weapons/test_blaster/test_blaster.tres" id="9_a7d0c"]
+[ext_resource type="Resource" uid="uid://bu3nn0tt42fil" path="res://weapons/test_blaster/test_blaster.tres" id="9_a7d0c"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_aok5b"]
 panorama = ExtResource("1_1d7th")

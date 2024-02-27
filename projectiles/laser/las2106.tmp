@@ -1,0 +1,57 @@
+[gd_scene load_steps=5 format=3 uid="uid://hvamf6v8ej6r"]
+
+[sub_resource type="GDScript" id="GDScript_ewax1"]
+script/source = "extends Projectile
+
+func _on_area_3d_body_entered(body):
+	if body.has_node(\"HealthComponent\"):
+		body.get_node(\"HealthComponent\").take_damage(damage)
+		if body.is_in_group(\"rober\"):
+			body.make_damage_particle(collision.position, 1)
+	queue_free()
+
+func collision_detected(body):
+	print(body)
+"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8gkwd"]
+shading_mode = 0
+albedo_color = Color(0.94902, 0.819608, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_s0wxd"]
+material = SubResource("StandardMaterial3D_8gkwd")
+size = Vector3(0.04, 0.04, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lt2p8"]
+size = Vector3(0.04, 0.04, 5)
+
+[node name="Laser" type="Node" node_paths=PackedStringArray("collision", "visual", "despawn_timer")]
+script = SubResource("GDScript_ewax1")
+speed = 20
+damage = 20
+visual_direction = null
+collision_direction = null
+life_time = 2.0
+collision = NodePath("Collision")
+visual = NodePath("Visual")
+despawn_timer = NodePath("Timer")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="Visual" type="CharacterBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Visual"]
+unique_name_in_owner = true
+cast_shadow = 0
+mesh = SubResource("BoxMesh_s0wxd")
+skeleton = NodePath("../..")
+
+[node name="Collision" type="CharacterBody3D" parent="."]
+
+[node name="Area3D" type="Area3D" parent="Collision"]
+collision_layer = 4
+collision_mask = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collision/Area3D"]
+shape = SubResource("BoxShape3D_lt2p8")
