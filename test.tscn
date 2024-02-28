@@ -1,11 +1,10 @@
-[gd_scene load_steps=18 format=3 uid="uid://d0e8iq1x7xroh"]
+[gd_scene load_steps=17 format=3 uid="uid://d0e8iq1x7xroh"]
 
 [ext_resource type="Texture2D" uid="uid://bxau5rmjm2gr7" path="res://1000_F_17627674_1xWawLAr5NQHWgdVJBk88w6NgdfpzYcr.jpg" id="1_1d7th"]
 [ext_resource type="Texture2D" path="res://rocky_trail_02_2k.gltf/textures/rocky_trail_02_diff_2k.dds" id="2_4knlf"]
 [ext_resource type="PackedScene" uid="uid://njkst6uy754i" path="res://player.tscn" id="3_jmqyr"]
 [ext_resource type="Texture2D" path="res://rocky_trail_02_2k.gltf/textures/rocky_trail_02_nor_gl_2k.dds" id="3_umdcs"]
 [ext_resource type="Script" path="res://roberspawn.gd" id="5_38wmy"]
-[ext_resource type="Texture2D" uid="uid://bp0qkcfyut816" path="res://icon.svg" id="6_w1578"]
 [ext_resource type="PackedScene" uid="uid://cjqunyfb4tjxc" path="res://rober.tscn" id="7_ama8s"]
 [ext_resource type="PackedScene" uid="uid://osds6gt883co" path="res://weapon_pickup.tscn" id="8_gcpdu"]
 [ext_resource type="Resource" uid="uid://bu3nn0tt42fil" path="res://weapons/test_blaster/test_blaster.tres" id="9_a7d0c"]
@@ -53,23 +52,16 @@ collision_mask = 23
 size = Vector3(200, 1, 200)
 material = SubResource("StandardMaterial3D_ua2t0")
 
-[node name="Player" parent="." node_paths=PackedStringArray("debug_decal") instance=ExtResource("3_jmqyr")]
+[node name="Player" parent="." instance=ExtResource("3_jmqyr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.07756, 15.2879, -18.6525)
 collision_mask = 9
-debug_decal = NodePath("../DebugDecal")
 
 [node name="Timer" type="Timer" parent="."]
 autostart = true
 script = ExtResource("5_38wmy")
 
-[node name="DebugDecal" type="Decal" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 2.97397, -0.510986, 1.15886, 11.8026)
-size = Vector3(0.5, 0.5, 0.168945)
-texture_albedo = ExtResource("6_w1578")
-
 [node name="CSGBox3D2" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.18701, 2.84313, 12.2984)
+transform = Transform3D(3.35865, 0, 0, 0, 1, 0, 0, 0, 1.54759, 8.11146, 2.84313, 30.6417)
 use_collision = true
 collision_layer = 8
 collision_mask = 23
