@@ -21,7 +21,7 @@ material = SubResource("StandardMaterial3D_8gkwd")
 size = Vector3(0.05, 0.05, 10)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lt2p8"]
-size = Vector3(0.05, 0.05, 3)
+size = Vector3(0.05, 0.05, 5)
 
 [node name="Laser" type="Node" node_paths=PackedStringArray("collision", "visual", "despawn_timer")]
 script = SubResource("GDScript_ewax1")
@@ -36,6 +36,7 @@ despawn_timer = NodePath("Timer")
 one_shot = true
 
 [node name="Visual" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0118866)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Visual"]
 unique_name_in_owner = true
@@ -47,7 +48,8 @@ skeleton = NodePath("../..")
 
 [node name="Area3D" type="Area3D" parent="Collision"]
 collision_layer = 4
-collision_mask = 11
+collision_mask = 10
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Collision/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0220578)
 shape = SubResource("BoxShape3D_lt2p8")
